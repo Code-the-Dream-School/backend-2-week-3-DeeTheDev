@@ -53,9 +53,9 @@ RSpec.describe "CustomersControllers", type: :request do
   describe "put customer_path with valid data" do
     it "updates an entry and redirects to the show path for the customer" do
       customer_attributes = FactoryBot.attributes_for(:customer)
-      expect { put customer_path, params: {customer: customer_attributes}
-    }.to_not change(Customer, :count)
-    expect(response).to redirect_to customer_path(id: customer_attributes.id) 
+      put 'http://localhost/customers/update', params:  {"customer": {id: 1, customer: customer_attributes} }
+      # headers: authorized_user_headers
+      expect(response).to render_template(:show)
     end
   end
   describe "put customer_path with invalid data" do
@@ -69,9 +69,9 @@ RSpec.describe "CustomersControllers", type: :request do
   end
   describe "delete a customer record" do
     it "deletes a customer record" do
-      customer = FactoryBot.create(:customer)
-      expect { delete 'http://localhost:3000/customers/:id', params: {customer: customer}
-      }.to_not change(Customer, :count)
+      expect { delete :destroy, id: 1 }.to change(Customer, :count)
+      # expect { delete :destroy, params: {customer: customer_attributes}
+      # }.to change(Customer, :count)
       expect(response.status).to eq(202)
     end
   end
