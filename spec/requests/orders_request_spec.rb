@@ -42,7 +42,9 @@ RSpec.describe "Orders", type: :request do
   #POST REQUEST VALID DATA
     describe "Post orders_path with valid data" do
       it "saves new order entry and redirects to that entry show page" do
-        order_attributes = FactoryBot.attributes_for(:order)
+        customer = FactoryBot.create(:customer)
+        order_attributes = FactoryBot.attributes_for(:order, customer_id: customer.id)
+        order_attributes[:customer_id] = customer.id
         expect { post orders_path, params: {order: order_attributes}
       }.to change(Order, :count)
 
